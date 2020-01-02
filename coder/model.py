@@ -15,7 +15,6 @@ class Difficulty(Enum):
         }[self]
 
 
-
 @dataclass
 class Problem:
     id: int
