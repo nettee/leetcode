@@ -26,7 +26,7 @@ def fetch_problem_list():
                           paid_only=paid_only)
         return problem
 
-    problems = (
+    problems = list(
             data['stat_status_pairs'] > pipe
             | foreach(item_to_problem)
             | where(X.id < 10000)
