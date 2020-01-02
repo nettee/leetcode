@@ -1,16 +1,7 @@
-from collections import namedtuple
-from enum import Enum
-
 import requests
 from pipetools import pipe, where, X, foreach
 
-Problem = namedtuple('Problem', ['id', 'title', 'title_slug', 'difficulty', 'paid_only'])
-
-
-class Difficulty(Enum):
-    Easy = 1
-    Medium = 2
-    Hard = 3
+from coder.model import Problem, Difficulty
 
 
 def fetch_problem_list():
@@ -40,9 +31,4 @@ def fetch_problem_list():
             | foreach(item_to_problem)
             | where(X.id < 10000)
     )
-    for e in problems:
-        print(e)
-
-
-if __name__ == '__main__':
-    fetch_problem_list()
+    return problems
