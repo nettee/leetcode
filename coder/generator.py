@@ -15,7 +15,7 @@ class ProblemForRender:
     id: int
     link: str
     difficulty_badge: str
-    solution_links: str
+    solution_links: List[str]
 
     @staticmethod
     def from_problem(problem: Problem):
@@ -48,8 +48,8 @@ class ProblemForRender:
             | foreach(lambda submissions: max(submissions, key=lambda s: s.timestamp))
             # Format to links
             | foreach(lambda file: f'[{file.language.display()}]({problem_dir / file.to_str()})')
-            | ', '.join
         )
+        links = list(links)
         return links
 
 
