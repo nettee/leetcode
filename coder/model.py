@@ -27,10 +27,30 @@ class Status(Enum):
 class Language(Enum):
     CPP = 'cpp'
     Java = 'java'
+    Python = 'python'
     MySQL = 'mysql'
 
+    def __le__(self, other):
+        if not isinstance(other, Language):
+            return False
+        return self.value.__le__(other.value)
+
+    @staticmethod
+    def from_extension(extension):
+        return {
+            'cpp': Language.CPP,
+            'java': Language.Java,
+            'py': Language.Python,
+            'sql': Language.MySQL,
+        }[extension]
+
     def extension(self):
-        return self.value
+        return {
+            Language.CPP: 'cpp',
+            Language.Java: 'java',
+            Language.Python: 'py',
+            Language.MySQL: 'sql',
+        }[self]
 
     def display(self):
         return {
@@ -46,24 +66,8 @@ class Problem:
     difficulty: Difficulty
     paid_only: bool
 
-
-@dataclass
-class ProblemForRender:
-    id: int
-    link: str
-    difficulty_badge: str
-
-    @staticmethod
-    def from_problem(problem: Problem):
-        problem_url = f'https://leetcode.com/problems/{problem.title_slug}/'
-        problem_link = f'[{problem.title}]({problem_url})'
-
-        difficulty_badge_url = f'https://img.shields.io/badge/{problem.difficulty.name}-{problem.difficulty.color()}'
-        difficulty_badge = f'![]({difficulty_badge_url})'
-
-        return ProblemForRender(id=problem.id,
-                                link=problem_link,
-                                difficulty_badge=difficulty_badge)
+    def dir_name(self):
+        return f'{self.id:04}.{self.title_slug}'
 
 
 @dataclass
@@ -74,3 +78,31 @@ class Submission:
     timestamp: int
     url: str
     code: str = ''
+
+
+@dataclass
+class ProblemSubmission:
+    problem: Problem
+    submission: Submission
+
+    def file_name(self):
+        problem = self.problem
+        submission = self.submission
+        return f'{problem.id:04}.{problem.title_slug}.{submission.timestamp}.{submission.language.extension()}'
+
+
+@dataclass
+class SubmissionFileName:
+    id: int
+    title_slug: str
+    timestamp: int
+    language: Language
+
+    @staticmethod
+    def from_str(file_name: str):
+        id, title_slug, timestamp, extension = file_name.split('.')
+        language = Language.from_extension(extension)
+        return SubmissionFileName(id=id, title_slug=title_slug, timestamp=timestamp, language=language)
+
+    def to_str(self):
+        return f'{self.id:0>4}.{self.title_slug}.{self.timestamp}.{self.language.extension()}'
