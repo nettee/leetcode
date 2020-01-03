@@ -52,6 +52,13 @@ class Language(Enum):
             Language.MySQL: 'sql',
         }[self]
 
+    def order(self):
+        return {
+            Language.CPP: 1,
+            Language.Java: 2,
+            Language.Python: 4,
+        }.get(self, 99)
+
     def display(self):
         return {
             Language.CPP: 'C++',

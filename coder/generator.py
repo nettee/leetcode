@@ -46,6 +46,8 @@ class ProblemForRender:
             | group_by(X.language)
             | foreach(X[1])
             | foreach(lambda submissions: max(submissions, key=lambda s: s.timestamp))
+            # Sort
+            | sort_by(X.language.order())
             # Format to links
             | foreach(lambda file: f'[{file.language.display()}]({problem_dir / file.to_str()})')
         )
