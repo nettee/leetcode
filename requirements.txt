@@ -1,3 +1,4 @@
+fire
 requests
 pipetools
 Jinja2

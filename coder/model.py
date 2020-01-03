@@ -16,22 +16,26 @@ class Difficulty(Enum):
 
 
 class Status(Enum):
-    AC = 'Accepted'
-    WA = 'Wrong Answer'
-    TLE = 'Time Limit Exceeded'
     CE = 'Compile Error'
     RE = 'Runtime Error'
+    TLE = 'Time Limit Exceeded'
+    MLE = 'Memory Limit Exceeded'
+    WA = 'Wrong Answer'
+    AC = 'Accepted'
 
 
 class Language(Enum):
     CPP = 'cpp'
-    JAVA = 'java'
+    Java = 'java'
+    MySQL = 'mysql'
+
+    def extension(self):
+        return self.value
 
     def display(self):
         return {
             Language.CPP: 'C++',
-            Language.JAVA: 'Java',
-        }[self]
+        }.get(self, self.name)
 
 
 @dataclass
