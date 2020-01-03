@@ -15,6 +15,25 @@ class Difficulty(Enum):
         }[self]
 
 
+class Status(Enum):
+    AC = 'Accepted'
+    WA = 'Wrong Answer'
+    TLE = 'Time Limit Exceeded'
+    CE = 'Compile Error'
+    RE = 'Runtime Error'
+
+
+class Language(Enum):
+    CPP = 'cpp'
+    JAVA = 'java'
+
+    def display(self):
+        return {
+            Language.CPP: 'C++',
+            Language.JAVA: 'Java',
+        }[self]
+
+
 @dataclass
 class Problem:
     id: int
@@ -41,3 +60,13 @@ class ProblemForRender:
         return ProblemForRender(id=problem.id,
                                 link=problem_link,
                                 difficulty_badge=difficulty_badge)
+
+
+@dataclass
+class Submission:
+    id: int
+    status: Status
+    language: Language
+    timestamp: int
+    url: str
+    code: str = ''
